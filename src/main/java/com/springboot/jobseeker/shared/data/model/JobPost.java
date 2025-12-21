@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name="job_posts")
-public class JobPost {
+public class JobPost extends MasterEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
