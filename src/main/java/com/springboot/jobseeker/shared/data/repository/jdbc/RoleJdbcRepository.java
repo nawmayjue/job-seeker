@@ -1,4 +1,4 @@
-package com.springboot.jobseeker.feature.role.repository.jdbc;
+package com.springboot.jobseeker.shared.data.repository.jdbc;
 
 import com.springboot.jobseeker.feature.role.dto.RoleResponse;
 

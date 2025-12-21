@@ -1,4 +1,4 @@
-package com.springboot.jobseeker.feature.role.repository.jpa;
+package com.springboot.jobseeker.shared.data.repository.jpa;
 
 import com.springboot.jobseeker.shared.data.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
