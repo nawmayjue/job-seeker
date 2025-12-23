@@ -3,7 +3,7 @@ package com.springboot.jobseeker.shared.data.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="user_skill_categories")
+@Table(name="users_skill_categories")
 public class UserSkillCategory extends MasterEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
