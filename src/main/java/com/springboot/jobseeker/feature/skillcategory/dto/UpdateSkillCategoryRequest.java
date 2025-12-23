@@ -1,11 +1,8 @@
 package com.springboot.jobseeker.feature.skillcategory.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 
-public record CreateSkillCategoryRequest(
+public record UpdateSkillCategoryRequest(
         @NotBlank(message = "Name is required")
         String name
 ) {

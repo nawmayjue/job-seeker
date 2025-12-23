@@ -2,6 +2,7 @@ package com.springboot.jobseeker.feature.skillcategory.controller;
 
 import com.springboot.jobseeker.feature.skillcategory.dto.CreateSkillCategoryRequest;
 import com.springboot.jobseeker.feature.skillcategory.dto.SkillCategoryResponse;
+import com.springboot.jobseeker.feature.skillcategory.dto.UpdateSkillCategoryRequest;
 import com.springboot.jobseeker.feature.skillcategory.service.SkillCategoryService;
 import com.springboot.jobseeker.shared.data.dto.ApiResponse;
 import com.springboot.jobseeker.shared.exception.BadRequestException;
@@ -42,6 +43,31 @@ public class SkillCategoryController {
         );
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse> updateSkillCategory(
+            @PathVariable Long id,
+            @RequestBody UpdateSkillCategoryRequest request
+            ){
+        ApiResponse apiResponse;
+        try{apiResponse = ApiResponse.builder()
+                .status(201)
+                .data(
+                        skillCategoryService.updateSkillCategory(id, request)
+                )
+                .message("Skill Category Updated Successfully.")
+                .build();
+        } catch (BadRequestException e) {
+            apiResponse = ApiResponse.builder()
+                    .status(HttpStatus.BAD_REQUEST.value())
+                    .data(false)
+                    .message(e.getMessage())
+                    .build();
+        }
+        return ResponseEntity.ok().body(
+                apiResponse
+        );
+    }
+
     @GetMapping
     public ResponseEntity<ApiResponse> retrieveAllSkillCategories(){
         return ResponseEntity.ok().body(
@@ -55,7 +81,6 @@ public class SkillCategoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse> retrieveOneSkillCategory(@PathVariable Long id){
-
         ApiResponse apiResponse;
         try {
             SkillCategoryResponse skillCategory = skillCategoryService.retrieveOne(id);
@@ -70,6 +95,15 @@ public class SkillCategoryController {
                     .data(false)
                     .message(e.getMessage())
                     .build();
+        }catch (BadRequestException be) {
+            return ResponseEntity.ok()
+                    .body(
+                            ApiResponse.builder()
+                                    .status(HttpStatus.BAD_REQUEST.value())
+                                    .data(false)
+                                    .message(be.getMessage())
+                                    .build()
+                    );
         }
 
         return ResponseEntity.ok().body(
@@ -89,6 +123,15 @@ public class SkillCategoryController {
                                     .status(HttpStatus.NOT_FOUND.value())
                                     .data(false)
                                     .message(e.getMessage())
+                                    .build()
+                    );
+        } catch (BadRequestException be) {
+            return ResponseEntity.ok()
+                    .body(
+                            ApiResponse.builder()
+                                    .status(HttpStatus.BAD_REQUEST.value())
+                                    .data(false)
+                                    .message(be.getMessage())
                                     .build()
                     );
         }
