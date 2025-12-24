@@ -24,8 +24,7 @@ public class SkillCategoryServiceImpl implements SkillCategoryService {
 
         if (skillCategoryJpaRepository.existsByName(request.name())) {
             SkillCategory existingSkillCategory = skillCategoryJpaRepository.findByName(request.name());
-            if(existingSkillCategory.getDeletedBy()!=null){
-                if (existingSkillCategory.getDeletedAt()!=null){
+            if(existingSkillCategory.getDeletedBy()!=null && existingSkillCategory.getDeletedAt()!=null){
                     existingSkillCategory.setDeletedBy(null);
                     existingSkillCategory.setDeletedAt(null);
                     SkillCategory savedSkillCategory = skillCategoryJpaRepository.save(existingSkillCategory);
@@ -33,8 +32,9 @@ public class SkillCategoryServiceImpl implements SkillCategoryService {
                     return SkillCategoryResponse.builder()
                             .id(savedSkillCategory.getId())
                             .name(savedSkillCategory.getName())
+                            .createdAt(savedSkillCategory.getCreatedAt())
+                            .updatedAt(savedSkillCategory.getUpdatedAt())
                             .build();
-                }
             }
             throw new BadRequestException("Skill Category Already Exists.");
         }
@@ -48,6 +48,8 @@ public class SkillCategoryServiceImpl implements SkillCategoryService {
         return SkillCategoryResponse.builder()
                 .id(savedSkillCategory.getId())
                 .name(savedSkillCategory.getName())
+                .createdAt(skillCategory.getCreatedAt())
+                .updatedAt(skillCategory.getUpdatedAt())
                 .build();
     }
 
@@ -72,6 +74,8 @@ public class SkillCategoryServiceImpl implements SkillCategoryService {
         return SkillCategoryResponse.builder()
                 .id(savedSkillCategory.getId())
                 .name(savedSkillCategory.getName())
+                .createdAt(savedSkillCategory.getCreatedAt())
+                .updatedAt(savedSkillCategory.getUpdatedAt())
                 .build();
     }
 
@@ -83,10 +87,15 @@ public class SkillCategoryServiceImpl implements SkillCategoryService {
                         skillCategory.getDeletedAt() == null &&
                                 skillCategory.getDeletedBy() == null
                 )
-                .map(skillCategory -> SkillCategoryResponse.builder()
-                        .id(skillCategory.getId())
-                        .name(skillCategory.getName())
-                        .build()
+                .map((SkillCategory skillCategory) ->{
+                    SkillCategoryResponse response = SkillCategoryResponse.builder()
+                            .id(skillCategory.getId())
+                            .name(skillCategory.getName())
+                            .createdAt(skillCategory.getCreatedAt())
+                            .updatedAt(skillCategory.getUpdatedAt())
+                            .build();
+                            return response;
+                        }
                 )
                 .toList();
     }
@@ -103,6 +112,8 @@ public class SkillCategoryServiceImpl implements SkillCategoryService {
         return SkillCategoryResponse.builder()
                 .id(skillCategory.getId())
                 .name(skillCategory.getName())
+                .createdAt(skillCategory.getCreatedAt())
+                .updatedAt(skillCategory.getUpdatedAt())
                 .build();
     }
 
