@@ -33,7 +33,7 @@ public abstract class MasterEntity {
     private Long deletedBy;
 
     @PrePersist
-    protected void onCreate() {
+    public void onCreate() {
         this.createdAt = LocalDateTime.now();
         if (updatedAt == null) {
             this.updatedAt = createdAt;
