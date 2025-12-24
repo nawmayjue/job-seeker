@@ -10,6 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
+@Table(name="skill_categories")
 public class SkillCategory extends MasterEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
