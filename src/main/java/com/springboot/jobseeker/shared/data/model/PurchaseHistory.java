@@ -3,7 +3,7 @@ package com.springboot.jobseeker.shared.data.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="purchase_histories")
+@Table(name="purchase_history")
 public class PurchaseHistory extends MasterEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
