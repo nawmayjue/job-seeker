@@ -1,9 +1,13 @@
 package com.springboot.jobseeker.shared.data.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Getter;
 
 @Entity
 @Table(name = "users")
+@Getter
+@Builder
 public class User extends MasterEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
