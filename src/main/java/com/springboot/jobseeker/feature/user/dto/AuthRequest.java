@@ -1,0 +1,14 @@
+package com.springboot.jobseeker.feature.user.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class AuthRequest {
+    private String username;
+    private String password;
+}
