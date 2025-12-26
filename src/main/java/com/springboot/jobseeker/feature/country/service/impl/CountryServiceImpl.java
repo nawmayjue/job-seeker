@@ -31,6 +31,8 @@ public class CountryServiceImpl implements CountryService {
                     return CountriesResponse.builder()
                             .id(savedCountry.getId())
                             .name(savedCountry.getName())
+                            .createdAt(savedCountry.getCreatedAt())
+                            .updatedAt(savedCountry.getUpdatedAt())
                             .build();
                 }
             }
@@ -46,6 +48,8 @@ public class CountryServiceImpl implements CountryService {
         return CountriesResponse.builder()
                 .id(savedCountry.getId())
                 .name(savedCountry.getName())
+                .createdAt(savedCountry.getCreatedAt())
+                .updatedAt(savedCountry.getUpdatedAt())
                 .build();
     }
 
@@ -57,10 +61,15 @@ public class CountryServiceImpl implements CountryService {
                         country.getDeletedAt() == null &&
                                 country.getDeletedBy() == null
                 )
-                .map(country -> CountriesResponse.builder()
-                        .id(country.getId())
-                        .name(country.getName())
-                        .build()
+                .map(country -> {
+                            CountriesResponse response = CountriesResponse.builder()
+                                    .id(country.getId())
+                                    .name(country.getName())
+                                    .createdAt(country.getCreatedAt())
+                                    .updatedAt(country.getUpdatedAt())
+                                    .build();
+                            return response;
+                        }
                 )
                 .toList();
     }
@@ -77,6 +86,8 @@ public class CountryServiceImpl implements CountryService {
         return CountriesResponse.builder()
                 .id(country.getId())
                 .name(country.getName())
+                .createdAt(country.getCreatedAt())
+                .updatedAt(country.getUpdatedAt())
                 .build();
     }
 
@@ -106,6 +117,8 @@ public class CountryServiceImpl implements CountryService {
         return CountriesResponse.builder()
                 .id(savedCountry.getId())
                 .name(savedCountry.getName())
+                .createdAt(savedCountry.getCreatedAt())
+                .updatedAt(savedCountry.getUpdatedAt())
                 .build();
     }
 

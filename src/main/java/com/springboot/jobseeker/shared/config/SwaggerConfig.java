@@ -18,7 +18,7 @@ public class SwaggerConfig {
     public OpenAPI customerAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Product Management API")
+                        .title("Job Seeker Management API")
                         .version("1.00")
                         .description("This is a RestFul API")
                         .contact(new Contact()
