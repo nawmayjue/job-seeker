@@ -1,10 +1,14 @@
 package com.springboot.jobseeker.shared.data.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name="roles")
-public class Role extends MasterEntity {
+@Getter
+@Setter
+public class Role{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

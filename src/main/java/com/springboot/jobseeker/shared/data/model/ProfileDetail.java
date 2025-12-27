@@ -1,9 +1,17 @@
 package com.springboot.jobseeker.shared.data.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name="profile_details")
+@Builder
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProfileDetail extends MasterEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,5 +26,8 @@ public class ProfileDetail extends MasterEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Country country;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 
 }

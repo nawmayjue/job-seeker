@@ -41,11 +41,11 @@ public class AuthController {
         if (authentication.isAuthenticated()) {
             String token = jwtService.generateToken(authRequest.getLoginUsername());
             return ResponseEntity.ok(
-                    new ApiResponse(
-                            200,
-                            new LoginResponse(token),
-                            "Login successful!"
-                    )
+                    ApiResponse.builder()
+                            .status(200)
+                            .data(new LoginResponse(token))
+                            .message("Login successful!")
+                            .build()
             );
         } else {
             throw new UsernameNotFoundException("Invalid user request!");
