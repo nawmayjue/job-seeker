@@ -37,15 +37,15 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getLoginUsername(), authRequest.getPassword()));
         if (authentication.isAuthenticated()) {
-            String token = jwtService.generateToken(authRequest.getUsername());
+            String token = jwtService.generateToken(authRequest.getLoginUsername());
             return ResponseEntity.ok(
-                    new ApiResponse(
-                            200,
-                            new LoginResponse(token),
-                            "Login successful!"
-                    )
+                    ApiResponse.builder()
+                            .status(200)
+                            .data(new LoginResponse(token))
+                            .message("Login successful!")
+                            .build()
             );
         } else {
             throw new UsernameNotFoundException("Invalid user request!");
