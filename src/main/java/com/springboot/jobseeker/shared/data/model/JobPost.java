@@ -15,4 +15,7 @@ public class JobPost extends MasterEntity {
     private String description;
     private BigDecimal fromSalary;
     private BigDecimal toSalary;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User owner;
 }

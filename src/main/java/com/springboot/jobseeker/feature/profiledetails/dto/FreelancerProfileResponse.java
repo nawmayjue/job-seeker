@@ -10,6 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FreelancerProfileResponse {
+    private Long id;
     private UserResponse userResponse;
     private String address;
     private String education;
