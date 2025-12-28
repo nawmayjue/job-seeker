@@ -31,7 +31,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         // Make ALL endpoints public temporarily for testing
                         .requestMatchers("/" +
-                                "api/v1/job-seeker/auth/**", "/api/v1/job-seeker/**", "/api/v1/job-seeker/countries/**", "/api/v1/job-seeker/users/**", "/api/v1/job-seeker/skill-categories/**").permitAll()
+                                "api/v1/job-seeker/auth/**", "/api/v1/job-seeker/**", "/api/v1/job-seeker/countries/**", "/api/v1/job-seeker/users/**", "/api/v1/job-seeker/skill-categories/**", "/api/v1/job-seeker/profile/summary/freelancer/**").permitAll()
                         .requestMatchers("/ws/**").permitAll()
                         .anyRequest().permitAll() //
                 )
