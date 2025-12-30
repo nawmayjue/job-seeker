@@ -5,6 +5,7 @@ import com.springboot.jobseeker.feature.profiledetails.dto.ClientProfileResponse
 import com.springboot.jobseeker.feature.profiledetails.service.ClientProfileService;
 import com.springboot.jobseeker.feature.skillcategory.dto.UpdateSkillCategoryRequest;
 import com.springboot.jobseeker.shared.data.dto.ApiResponse;
+import com.springboot.jobseeker.shared.data.dto.ErrorResponse;
 import com.springboot.jobseeker.shared.exception.BadRequestException;
 import com.springboot.jobseeker.shared.exception.NotFoundException;
 import lombok.AllArgsConstructor;
@@ -61,35 +62,31 @@ public class ClientProfileController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse> deleteById(
+    public ResponseEntity<?> deleteById(
             @PathVariable Long id
     ){
         try {
             clientProfileService.deleteClientById(id);
             return ResponseEntity.noContent().build();
-        }catch (NotFoundException e) {
-            return ResponseEntity.ok()
-                    .body(
-                            ApiResponse.builder()
-                                    .status(HttpStatus.NOT_FOUND.value())
-                                    .data(false)
-                                    .message(e.getMessage())
-                                    .build()
-                    );
-        } catch (BadRequestException be) {
-            return ResponseEntity.ok()
-                    .body(
-                            ApiResponse.builder()
-                                    .status(HttpStatus.BAD_REQUEST.value())
-                                    .data(false)
-                                    .message(be.getMessage())
-                                    .build()
-                    );
+        }catch(NotFoundException e2) {
+            return ResponseEntity.badRequest().body(
+                    new ErrorResponse(
+                            HttpStatus.NOT_FOUND.value(),
+                            e2.getMessage()
+                    )
+            );
+        }catch (BadRequestException e){
+            return ResponseEntity.badRequest().body(
+                    new ErrorResponse(
+                            HttpStatus.BAD_REQUEST.value(),
+                            e.getMessage()
+                    )
+            );
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> updateClientProfile(
+    public ResponseEntity<?> updateClientProfile(
             @PathVariable Long id,
             @RequestBody ClientProfileRequest request
     ){
@@ -103,12 +100,13 @@ public class ClientProfileController {
                 )
                 .message("Client Profile Updated Successfully.")
                 .build();
-        } catch (BadRequestException e) {
-            apiResponse = ApiResponse.builder()
-                    .status(HttpStatus.BAD_REQUEST.value())
-                    .data(false)
-                    .message(e.getMessage())
-                    .build();
+        }catch (BadRequestException e){
+            return ResponseEntity.badRequest().body(
+                    new ErrorResponse(
+                            HttpStatus.BAD_REQUEST.value(),
+                            e.getMessage()
+                    )
+            );
         }
         return ResponseEntity.ok().body(
                 apiResponse

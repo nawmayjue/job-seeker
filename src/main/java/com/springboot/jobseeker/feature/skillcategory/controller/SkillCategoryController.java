@@ -5,6 +5,7 @@ import com.springboot.jobseeker.feature.skillcategory.dto.SkillCategoryResponse;
 import com.springboot.jobseeker.feature.skillcategory.dto.UpdateSkillCategoryRequest;
 import com.springboot.jobseeker.feature.skillcategory.service.SkillCategoryService;
 import com.springboot.jobseeker.shared.data.dto.ApiResponse;
+import com.springboot.jobseeker.shared.data.dto.ErrorResponse;
 import com.springboot.jobseeker.shared.exception.BadRequestException;
 import com.springboot.jobseeker.shared.exception.NotFoundException;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,7 @@ public class SkillCategoryController {
     private final SkillCategoryService skillCategoryService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse> createSkillCategory(
+    public ResponseEntity<?> createSkillCategory(
             @RequestBody CreateSkillCategoryRequest request
     ){
         ApiResponse apiResponse;
@@ -31,12 +32,13 @@ public class SkillCategoryController {
                 )
                 .message("Skill Category Created Successfully.")
                 .build();
-        } catch (BadRequestException e) {
-            apiResponse = ApiResponse.builder()
-                    .status(HttpStatus.BAD_REQUEST.value())
-                    .data(false)
-                    .message(e.getMessage())
-                    .build();
+        }catch (BadRequestException e){
+            return ResponseEntity.badRequest().body(
+                    new ErrorResponse(
+                            HttpStatus.BAD_REQUEST.value(),
+                            e.getMessage()
+                    )
+            );
         }
         return ResponseEntity.ok().body(
             apiResponse
@@ -44,7 +46,7 @@ public class SkillCategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> updateSkillCategory(
+    public ResponseEntity<?> updateSkillCategory(
             @PathVariable Long id,
             @RequestBody UpdateSkillCategoryRequest request
             ){
@@ -56,12 +58,13 @@ public class SkillCategoryController {
                 )
                 .message("Skill Category Updated Successfully.")
                 .build();
-        } catch (BadRequestException e) {
-            apiResponse = ApiResponse.builder()
-                    .status(HttpStatus.BAD_REQUEST.value())
-                    .data(false)
-                    .message(e.getMessage())
-                    .build();
+        }catch (BadRequestException e){
+            return ResponseEntity.badRequest().body(
+                    new ErrorResponse(
+                            HttpStatus.BAD_REQUEST.value(),
+                            e.getMessage()
+                    )
+            );
         }
         return ResponseEntity.ok().body(
                 apiResponse
@@ -80,7 +83,7 @@ public class SkillCategoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse> retrieveOneSkillCategory(@PathVariable Long id){
+    public ResponseEntity<?> retrieveOneSkillCategory(@PathVariable Long id){
         ApiResponse apiResponse;
         try {
             SkillCategoryResponse skillCategory = skillCategoryService.retrieveOne(id);
@@ -89,51 +92,45 @@ public class SkillCategoryController {
                     .data(skillCategoryService.retrieveOne(id))
                     .message("Skill Category Retrieved Successfully.")
                     .build();
-        } catch (NotFoundException e) {
-            apiResponse = ApiResponse.builder()
-                    .status(HttpStatus.NOT_FOUND.value())
-                    .data(false)
-                    .message(e.getMessage())
-                    .build();
-        }catch (BadRequestException be) {
-            return ResponseEntity.ok()
-                    .body(
-                            ApiResponse.builder()
-                                    .status(HttpStatus.BAD_REQUEST.value())
-                                    .data(false)
-                                    .message(be.getMessage())
-                                    .build()
-                    );
+        }catch(NotFoundException e2) {
+            return ResponseEntity.badRequest().body(
+                    new ErrorResponse(
+                            HttpStatus.NOT_FOUND.value(),
+                            e2.getMessage()
+                    )
+            );
+        }catch (BadRequestException e){
+            return ResponseEntity.badRequest().body(
+                    new ErrorResponse(
+                            HttpStatus.BAD_REQUEST.value(),
+                            e.getMessage()
+                    )
+            );
         }
-
         return ResponseEntity.ok().body(
                 apiResponse
         );
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse> deleteSkillCategory(@PathVariable Long id){
+    public ResponseEntity<?> deleteSkillCategory(@PathVariable Long id){
         try {
             skillCategoryService.delete(id);
             return ResponseEntity.noContent().build();
-        } catch (NotFoundException e) {
-            return ResponseEntity.ok()
-                    .body(
-                            ApiResponse.builder()
-                                    .status(HttpStatus.NOT_FOUND.value())
-                                    .data(false)
-                                    .message(e.getMessage())
-                                    .build()
-                    );
-        } catch (BadRequestException be) {
-            return ResponseEntity.ok()
-                    .body(
-                            ApiResponse.builder()
-                                    .status(HttpStatus.BAD_REQUEST.value())
-                                    .data(false)
-                                    .message(be.getMessage())
-                                    .build()
-                    );
+        }catch(NotFoundException e2) {
+            return ResponseEntity.badRequest().body(
+                    new ErrorResponse(
+                            HttpStatus.NOT_FOUND.value(),
+                            e2.getMessage()
+                    )
+            );
+        }catch (BadRequestException e){
+            return ResponseEntity.badRequest().body(
+                    new ErrorResponse(
+                            HttpStatus.BAD_REQUEST.value(),
+                            e.getMessage()
+                    )
+            );
         }
     }
 }
