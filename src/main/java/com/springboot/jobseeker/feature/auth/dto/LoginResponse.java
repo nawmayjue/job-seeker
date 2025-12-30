@@ -10,6 +10,6 @@ import lombok.*;
 @Builder
 public class LoginResponse {
     private String token;
-//    private UserResponse user; This is homework
+    private UserResponse user;
 
 }

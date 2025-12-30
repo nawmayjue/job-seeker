@@ -6,6 +6,7 @@ import com.springboot.jobseeker.feature.user.dto.UserRegisterRequest;
 import com.springboot.jobseeker.feature.user.service.JwtService;
 import com.springboot.jobseeker.feature.user.service.impl.UserServiceImpl;
 import com.springboot.jobseeker.shared.data.dto.ApiResponse;
+import com.springboot.jobseeker.shared.data.repository.jdbc.UserJdbcRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ public class AuthController {
     private final UserServiceImpl service;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final UserJdbcRepository userJdbcRepository;
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> addNewUser(
@@ -43,7 +45,7 @@ public class AuthController {
             return ResponseEntity.ok(
                     ApiResponse.builder()
                             .status(200)
-                            .data(new LoginResponse(token))
+                            .data(new LoginResponse(token, userJdbcRepository.findByLoginUsername(authRequest.getLoginUsername())))
                             .message("Login successful!")
                             .build()
             );

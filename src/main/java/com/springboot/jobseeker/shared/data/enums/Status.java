@@ -6,7 +6,8 @@ import java.util.List;
 public enum Status {
     INVALID(0, "Invalid"),
     ACCEPT(1, "Accept"),
-    REJECT(2, "Reject");
+    REJECT(2, "Reject"),
+    PENDING(3, "Pending");
 
     private final Integer code;
     private final String description;
@@ -21,6 +22,14 @@ public enum Status {
                 Status.values()). map(
                 status -> new StatusInfo(status.getCode(), status.getDescription())
         ).toList();
+    }
+
+    public static Status fromCode(int code){
+        return Arrays.stream(
+                        Status.values())
+                .filter(status -> status.getCode() == code)
+                .findFirst()
+                .orElse(null);
     }
 
     public Integer getCode() {
