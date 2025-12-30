@@ -19,7 +19,16 @@ public class UserJdbcRepositoryImpl implements UserJdbcRepository {
             SELECT id,full_name AS fullName,login_username AS loginUsername,login_email AS loginEmail FROM users
             """;
     private static final String FIND_BY_LOGIN_USERNAME_QUERY= """
-            SELECT id,full_name AS fullName,login_username AS loginUsername,login_email AS loginEmail FROM users WHERE login_username=?
+            SELECT 
+            u.id AS userId,
+            u.full_name AS userFullName,
+            u.login_username AS userLoginUsername,
+            u.login_email AS userLoginEmail,
+            r.id AS roleId,
+            r.name AS roleName 
+            FROM users u
+            JOIN roles r ON r.id=u.role_id
+            WHERE login_username=?
             """;
 
     @Override
