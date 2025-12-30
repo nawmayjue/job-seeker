@@ -5,6 +5,7 @@ import com.springboot.jobseeker.feature.country.dto.CreateCountryRequest;
 import com.springboot.jobseeker.feature.country.dto.UpdateCountryRequest;
 import com.springboot.jobseeker.feature.country.service.CountryService;
 import com.springboot.jobseeker.shared.data.dto.ApiResponse;
+import com.springboot.jobseeker.shared.data.dto.ErrorResponse;
 import com.springboot.jobseeker.shared.data.repository.jpa.CountryJpaRepository;
 import com.springboot.jobseeker.shared.exception.BadRequestException;
 import com.springboot.jobseeker.shared.exception.NotFoundException;
@@ -20,7 +21,7 @@ public class CountryController {
     private final CountryService countryService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse> createCountry(
+    public ResponseEntity<?> createCountry(
             @RequestBody CreateCountryRequest request
     ){
         ApiResponse apiResponse;
@@ -32,12 +33,13 @@ public class CountryController {
                     )
                     .message("Country Created Successfully.")
                     .build();
-        } catch (BadRequestException e) {
-            apiResponse = ApiResponse.builder()
-                    .status(HttpStatus.BAD_REQUEST.value())
-                    .data(false)
-                    .message(e.getMessage())
-                    .build();
+        }catch (BadRequestException e){
+            return ResponseEntity.badRequest().body(
+                    new ErrorResponse(
+                            HttpStatus.BAD_REQUEST.value(),
+                            e.getMessage()
+                    )
+            );
         }
         return ResponseEntity.ok().body(
                 apiResponse
@@ -45,7 +47,7 @@ public class CountryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> updateCountry(
+    public ResponseEntity<?> updateCountry(
             @PathVariable Long id,
             @RequestBody UpdateCountryRequest request
     ){
@@ -57,12 +59,13 @@ public class CountryController {
                 )
                 .message("Country Updated Successfully.")
                 .build();
-        } catch (BadRequestException e) {
-            apiResponse = ApiResponse.builder()
-                    .status(HttpStatus.BAD_REQUEST.value())
-                    .data(false)
-                    .message(e.getMessage())
-                    .build();
+        }catch (BadRequestException e) {
+            return ResponseEntity.badRequest().body(
+                    new ErrorResponse(
+                            HttpStatus.BAD_REQUEST.value(),
+                            e.getMessage()
+                    )
+            );
         }
         return ResponseEntity.ok().body(
                 apiResponse
@@ -81,7 +84,7 @@ public class CountryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse> retrieveOneCountry(@PathVariable Long id){
+    public ResponseEntity<?> retrieveOneCountry(@PathVariable Long id){
         ApiResponse apiResponse;
         try {
             CountriesResponse countriesResponse = countryService.retrieveOne(id);
@@ -90,30 +93,28 @@ public class CountryController {
                     .data(countriesResponse)
                     .message("Country Retrieved Successfully.")
                     .build();
-        } catch (NotFoundException e) {
-            apiResponse = ApiResponse.builder()
-                    .status(HttpStatus.NOT_FOUND.value())
-                    .data(false)
-                    .message(e.getMessage())
-                    .build();
-        }catch (BadRequestException be) {
-            return ResponseEntity.ok()
-                    .body(
-                            ApiResponse.builder()
-                                    .status(HttpStatus.BAD_REQUEST.value())
-                                    .data(false)
-                                    .message(be.getMessage())
-                                    .build()
-                    );
+        }  catch(NotFoundException e2) {
+            return ResponseEntity.badRequest().body(
+                    new ErrorResponse(
+                            HttpStatus.NOT_FOUND.value(),
+                            e2.getMessage()
+                    )
+            );
+        }catch (BadRequestException e){
+            return ResponseEntity.badRequest().body(
+                    new ErrorResponse(
+                            HttpStatus.BAD_REQUEST.value(),
+                            e.getMessage()
+                    )
+            );
         }
-
         return ResponseEntity.ok().body(
                 apiResponse
         );
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse> deleteCountry(@PathVariable Long id){
+    public ResponseEntity<?> deleteCountry(@PathVariable Long id){
         try {
             countryService.delete(id);
             return ResponseEntity.noContent().build();
@@ -126,15 +127,13 @@ public class CountryController {
                                     .message(e.getMessage())
                                     .build()
                     );
-        } catch (BadRequestException be) {
-            return ResponseEntity.ok()
-                    .body(
-                            ApiResponse.builder()
-                                    .status(HttpStatus.BAD_REQUEST.value())
-                                    .data(false)
-                                    .message(be.getMessage())
-                                    .build()
-                    );
+        } catch (BadRequestException e){
+            return ResponseEntity.badRequest().body(
+                    new ErrorResponse(
+                            HttpStatus.BAD_REQUEST.value(),
+                            e.getMessage()
+                    )
+            );
         }
     }
 }

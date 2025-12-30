@@ -2,6 +2,9 @@ package com.springboot.jobseeker.feature.user.controller;
 
 import com.springboot.jobseeker.feature.user.service.UserService;
 import com.springboot.jobseeker.shared.data.dto.ApiResponse;
+import com.springboot.jobseeker.shared.data.dto.ErrorResponse;
+import com.springboot.jobseeker.shared.exception.BadRequestException;
+import com.springboot.jobseeker.shared.exception.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,18 +42,17 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse> deleteMapping(
+    public ResponseEntity<?> deleteMapping(
            @PathVariable Long id
     ){
         try {
             userService.deleteUserById(id);
             return ResponseEntity.noContent().build();
-        }catch (RuntimeException e){
+        }catch(NotFoundException e2) {
             return ResponseEntity.badRequest().body(
-                    new ApiResponse(
+                    new ErrorResponse(
                             HttpStatus.NOT_FOUND.value(),
-                            null,
-                            e.getMessage()
+                            e2.getMessage()
                     )
             );
         }
